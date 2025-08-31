@@ -10,13 +10,15 @@ import {
 import { useEffect, useRef, useState } from "react";
 import { useMemoizedFn, useUnmount } from "ahooks";
 
-import { Button } from "./Button";
 import { AvatarVideo } from "./AvatarSession/AvatarVideo";
 import { useStreamingAvatarSession } from "./logic/useStreamingAvatarSession";
 import { AvatarControls } from "./AvatarSession/AvatarControls";
 import { useVoiceChat } from "./logic/useVoiceChat";
 import { StreamingAvatarProvider, StreamingAvatarSessionState } from "./logic";
 import { LoadingIcon } from "./Icons";
+import { Vortex } from "@/components/ui/vortex";
+import ColourfulText from "@/components/ui/colourful-text";
+import { Button as MovingBorderButton } from "@/components/ui/moving-border";
 
 import { AVATARS } from "@/app/lib/constants";
 
@@ -139,35 +141,56 @@ function InteractiveAvatar() {
   }, [mediaStream, stream]);
 
   return (
-    <div className="w-full flex flex-col items-center justify-center min-h-screen">
-      <div className="flex flex-col gap-6 items-center justify-center">
-        <h1 className="text-3xl font-bold text-white mb-8">
-          Interactive Avatar
-        </h1>
-
-        {sessionState === StreamingAvatarSessionState.INACTIVE ? (
-          <div className="flex flex-row gap-4">
-            <Button onClick={() => startSessionV2(true)}>
+    <div className="w-full min-h-screen relative">
+      {sessionState === StreamingAvatarSessionState.INACTIVE ? (
+        <Vortex
+          backgroundColor="black"
+          className="flex items-center flex-col justify-center gap-8 px-4 py-6 w-full min-h-screen"
+        >
+          <div className="text-center max-w-3xl mx-auto">
+            <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold text-white mb-4 leading-tight">
+              Welcome to <ColourfulText text="MAHE Dubai" /> – <br />
+              <ColourfulText text="Shaping Futures" />,{" "}
+              <ColourfulText text="Inspiring Minds" />
+            </h1>
+            <p className="text-lg md:text-xl text-gray-300 mb-8 font-light">
+              Click below to talk to me and explore MAHE Dubai
+            </p>
+          </div>
+          <div className="flex justify-center">
+            <MovingBorderButton
+              onClick={() => startSessionV2(true)}
+              borderRadius="2rem"
+              className="bg-slate-900/[0.8] text-white border-slate-700 hover:bg-slate-800/[0.8] transition-colors duration-200"
+              containerClassName="w-56 h-14"
+              borderClassName="bg-[radial-gradient(#0ea5e9_40%,transparent_60%)]"
+            >
               Start Voice Chat
-            </Button>
-            <Button onClick={() => startSessionV2(false)}>
-              Start Text Chat
-            </Button>
+            </MovingBorderButton>
           </div>
-        ) : sessionState === StreamingAvatarSessionState.CONNECTING ? (
-          <div className="flex flex-col items-center gap-4">
-            <LoadingIcon />
-            <p className="text-white">Connecting...</p>
+        </Vortex>
+      ) : (
+        <div className="w-full flex flex-col items-center justify-center min-h-screen">
+          <div className="flex flex-col gap-6 items-center justify-center">
+            <h1 className="text-3xl font-bold text-white mb-8">
+              Interactive Avatar
+            </h1>
+            {sessionState === StreamingAvatarSessionState.CONNECTING ? (
+              <div className="flex flex-col items-center gap-4">
+                <LoadingIcon />
+                <p className="text-white">Connecting...</p>
+              </div>
+            ) : (
+              <div className="flex flex-col items-center gap-4">
+                <div className="w-[600px] aspect-video bg-zinc-900 rounded-xl overflow-hidden">
+                  <AvatarVideo ref={mediaStream} />
+                </div>
+                <AvatarControls />
+              </div>
+            )}
           </div>
-        ) : (
-          <div className="flex flex-col items-center gap-4">
-            <div className="w-[600px] aspect-video bg-zinc-900 rounded-xl overflow-hidden">
-              <AvatarVideo ref={mediaStream} />
-            </div>
-            <AvatarControls />
-          </div>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -20,7 +20,7 @@ export const metadata: Metadata = {
     template: `%s - MAHE DUBAI DEMO`,
   },
   icons: {
-    icon: "/arun.jpeg",
+    icon: "/mahe_logo.jpeg",
   },
 };
 

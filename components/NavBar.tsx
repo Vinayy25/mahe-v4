@@ -8,7 +8,7 @@ export default function NavBar() {
       <div className="flex flex-row justify-between items-center w-[1000px] m-auto p-6">
         <div className="flex flex-row items-center gap-4">
           <img
-            src="/arun.jpeg"
+            src="/mahe_logo.jpeg"
             alt="Logo"
             className="h-16 w-16 rounded-full"
           />
