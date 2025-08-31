@@ -1,4 +1,4 @@
-# MAHE DUBAI DEMO
+# MAHE DUBAI DEMO 
 
 ![MAHE DUBAI DEMO Screenshot](./public/demo.png)
 
