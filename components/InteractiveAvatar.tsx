@@ -165,7 +165,7 @@ function InteractiveAvatar() {
               containerClassName="w-56 h-14"
               borderClassName="bg-[radial-gradient(#0ea5e9_40%,transparent_60%)]"
             >
-              🎤 Start Voice Chat
+              Start Voice Chat
             </MovingBorderButton>
           </div>
         </Vortex>
