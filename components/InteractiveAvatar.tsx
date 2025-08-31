@@ -17,6 +17,7 @@ import { AvatarControls } from "./AvatarSession/AvatarControls";
 import { useVoiceChat } from "./logic/useVoiceChat";
 import { StreamingAvatarProvider, StreamingAvatarSessionState } from "./logic";
 import { LoadingIcon } from "./Icons";
+import { Vortex } from "@/components/ui/vortex";
 
 import { AVATARS } from "@/app/lib/constants";
 
@@ -139,13 +140,15 @@ function InteractiveAvatar() {
   }, [mediaStream, stream]);
 
   return (
-    <div className="w-full flex flex-col items-center justify-center min-h-screen">
-      <div className="flex flex-col gap-6 items-center justify-center">
-        <h1 className="text-3xl font-bold text-white mb-8">
-          Interactive Avatar
-        </h1>
-
-        {sessionState === StreamingAvatarSessionState.INACTIVE ? (
+    <div className="w-full min-h-screen relative">
+      {sessionState === StreamingAvatarSessionState.INACTIVE ? (
+        <Vortex
+          backgroundColor="black"
+          className="flex items-center flex-col justify-center gap-6 px-4 py-6 w-full min-h-screen"
+        >
+          <h1 className="text-3xl font-bold text-white mb-8">
+            Interactive Avatar
+          </h1>
           <div className="flex flex-row gap-4">
             <Button onClick={() => startSessionV2(true)}>
               Start Voice Chat
@@ -154,20 +157,29 @@ function InteractiveAvatar() {
               Start Text Chat
             </Button>
           </div>
-        ) : sessionState === StreamingAvatarSessionState.CONNECTING ? (
-          <div className="flex flex-col items-center gap-4">
-            <LoadingIcon />
-            <p className="text-white">Connecting...</p>
+        </Vortex>
+      ) : (
+        <div className="w-full flex flex-col items-center justify-center min-h-screen">
+          <div className="flex flex-col gap-6 items-center justify-center">
+            <h1 className="text-3xl font-bold text-white mb-8">
+              Interactive Avatar
+            </h1>
+            {sessionState === StreamingAvatarSessionState.CONNECTING ? (
+              <div className="flex flex-col items-center gap-4">
+                <LoadingIcon />
+                <p className="text-white">Connecting...</p>
+              </div>
+            ) : (
+              <div className="flex flex-col items-center gap-4">
+                <div className="w-[600px] aspect-video bg-zinc-900 rounded-xl overflow-hidden">
+                  <AvatarVideo ref={mediaStream} />
+                </div>
+                <AvatarControls />
+              </div>
+            )}
           </div>
-        ) : (
-          <div className="flex flex-col items-center gap-4">
-            <div className="w-[600px] aspect-video bg-zinc-900 rounded-xl overflow-hidden">
-              <AvatarVideo ref={mediaStream} />
-            </div>
-            <AvatarControls />
-          </div>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 }
