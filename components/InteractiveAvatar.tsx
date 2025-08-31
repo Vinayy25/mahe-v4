@@ -11,30 +11,46 @@ import { useEffect, useRef, useState } from "react";
 import { useMemoizedFn, useUnmount } from "ahooks";
 
 import { Button } from "./Button";
-import { AvatarConfig } from "./AvatarConfig";
 import { AvatarVideo } from "./AvatarSession/AvatarVideo";
 import { useStreamingAvatarSession } from "./logic/useStreamingAvatarSession";
 import { AvatarControls } from "./AvatarSession/AvatarControls";
 import { useVoiceChat } from "./logic/useVoiceChat";
 import { StreamingAvatarProvider, StreamingAvatarSessionState } from "./logic";
 import { LoadingIcon } from "./Icons";
-import { MessageHistory } from "./AvatarSession/MessageHistory";
 
 import { AVATARS } from "@/app/lib/constants";
 
 const DEFAULT_CONFIG: StartAvatarRequest = {
-  quality: AvatarQuality.Low,
-  avatarName: AVATARS[0].avatar_id,
-  knowledgeId: "988437160dc645f9a6aec4eb616795f2",
+  quality:
+    AvatarQuality[
+      process.env.NEXT_PUBLIC_AVATAR_QUALITY as keyof typeof AvatarQuality
+    ] || AvatarQuality.Low,
+  avatarName:
+    process.env.NEXT_PUBLIC_DEFAULT_AVATAR_NAME || AVATARS[0].avatar_id,
+  knowledgeId:
+    process.env.KNOWLEDGEBASE_ID || "988437160dc645f9a6aec4eb616795f2",
   voice: {
-    rate: 1.5,
-    emotion: VoiceEmotion.EXCITED,
-    model: ElevenLabsModel.eleven_flash_v2_5,
+    rate: parseFloat(process.env.NEXT_PUBLIC_VOICE_RATE || "1.5"),
+    emotion:
+      VoiceEmotion[
+        process.env.NEXT_PUBLIC_VOICE_EMOTION as keyof typeof VoiceEmotion
+      ] || VoiceEmotion.EXCITED,
+    model:
+      ElevenLabsModel[
+        process.env.NEXT_PUBLIC_VOICE_MODEL as keyof typeof ElevenLabsModel
+      ] || ElevenLabsModel.eleven_flash_v2_5,
   },
-  language: "en",
-  voiceChatTransport: VoiceChatTransport.WEBSOCKET,
+  language: process.env.NEXT_PUBLIC_LANGUAGE || "en",
+  voiceChatTransport:
+    VoiceChatTransport[
+      process.env
+        .NEXT_PUBLIC_VOICE_CHAT_TRANSPORT as keyof typeof VoiceChatTransport
+    ] || VoiceChatTransport.WEBSOCKET,
   sttSettings: {
-    provider: STTProvider.DEEPGRAM,
+    provider:
+      STTProvider[
+        process.env.NEXT_PUBLIC_STT_PROVIDER as keyof typeof STTProvider
+      ] || STTProvider.DEEPGRAM,
   },
 };
 
@@ -123,35 +139,35 @@ function InteractiveAvatar() {
   }, [mediaStream, stream]);
 
   return (
-    <div className="w-full flex flex-col gap-4">
-      <div className="flex flex-col rounded-xl bg-zinc-900 overflow-hidden">
-        <div className="relative w-full aspect-video overflow-hidden flex flex-col items-center justify-center">
-          {sessionState !== StreamingAvatarSessionState.INACTIVE ? (
-            <AvatarVideo ref={mediaStream} />
-          ) : (
-            <AvatarConfig config={config} onConfigChange={setConfig} />
-          )}
-        </div>
-        <div className="flex flex-col gap-3 items-center justify-center p-4 border-t border-zinc-700 w-full">
-          {sessionState === StreamingAvatarSessionState.CONNECTED ? (
-            <AvatarControls />
-          ) : sessionState === StreamingAvatarSessionState.INACTIVE ? (
-            <div className="flex flex-row gap-4">
-              <Button onClick={() => startSessionV2(true)}>
-                Start Voice Chat
-              </Button>
-              <Button onClick={() => startSessionV2(false)}>
-                Start Text Chat
-              </Button>
-            </div>
-          ) : (
+    <div className="w-full flex flex-col items-center justify-center min-h-screen">
+      <div className="flex flex-col gap-6 items-center justify-center">
+        <h1 className="text-3xl font-bold text-white mb-8">
+          Interactive Avatar
+        </h1>
+
+        {sessionState === StreamingAvatarSessionState.INACTIVE ? (
+          <div className="flex flex-row gap-4">
+            <Button onClick={() => startSessionV2(true)}>
+              Start Voice Chat
+            </Button>
+            <Button onClick={() => startSessionV2(false)}>
+              Start Text Chat
+            </Button>
+          </div>
+        ) : sessionState === StreamingAvatarSessionState.CONNECTING ? (
+          <div className="flex flex-col items-center gap-4">
             <LoadingIcon />
-          )}
-        </div>
+            <p className="text-white">Connecting...</p>
+          </div>
+        ) : (
+          <div className="flex flex-col items-center gap-4">
+            <div className="w-[600px] aspect-video bg-zinc-900 rounded-xl overflow-hidden">
+              <AvatarVideo ref={mediaStream} />
+            </div>
+            <AvatarControls />
+          </div>
+        )}
       </div>
-      {sessionState === StreamingAvatarSessionState.CONNECTED && (
-        <MessageHistory />
-      )}
     </div>
   );
 }
