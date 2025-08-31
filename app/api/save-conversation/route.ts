@@ -14,18 +14,17 @@ export async function POST(request: NextRequest) {
       fs.mkdirSync(dir, { recursive: true });
     }
 
-    // Read existing conversation or initialize empty array
-    let existingMessages = [];
-    if (fs.existsSync(filePath)) {
-      const data = fs.readFileSync(filePath, 'utf8');
-      existingMessages = JSON.parse(data);
+    // Write the messages to the main file (overwrite)
+    fs.writeFileSync(filePath, JSON.stringify(messages, null, 2));
+
+    // Now, move to old_convos with timestamp
+    const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+    const oldConvosDir = path.join(process.cwd(), 'public', 'conversations', 'old_convos');
+    if (!fs.existsSync(oldConvosDir)) {
+      fs.mkdirSync(oldConvosDir, { recursive: true });
     }
-
-    // Append new messages from the session
-    existingMessages.push(...messages);
-
-    // Write back the updated conversation
-    fs.writeFileSync(filePath, JSON.stringify(existingMessages, null, 2));
+    const newFilePath = path.join(oldConvosDir, `conversation_${timestamp}.json`);
+    fs.renameSync(filePath, newFilePath);
 
     return NextResponse.json({ success: true });
   } catch (error) {

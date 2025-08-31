@@ -55,15 +55,17 @@ export const useStreamingAvatarSession = () => {
   );
 
   const stop = useCallback(async () => {
-    // Save conversation before clearing
-    try {
-      await fetch('/api/save-conversation', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ messages }),
-      });
-    } catch (error) {
-      console.error('Failed to save conversation:', error);
+    // Save conversation before clearing, only if there are messages
+    if (messages.length > 0) {
+      try {
+        await fetch('/api/save-conversation', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ messages }),
+        });
+      } catch (error) {
+        console.error('Failed to save conversation:', error);
+      }
     }
 
     avatarRef.current?.off(StreamingEvents.STREAM_READY, handleStream);
