@@ -8,8 +8,6 @@ li {
   padding: 2px;
 }
 
-
-
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -66,13 +64,314 @@ li {
   }
 }
 
-
-
 @layer base {
   * {
     @apply border-border;
   }
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+@layer utilities {
+  /* Fade in animation */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animate-fade-in {
+    animation: fadeIn 0.8s ease-out forwards;
+  }
+
+  /* Slide up animation */
+  @keyframes slideUp {
+    from {
+      opacity: 0;
+      transform: translateY(40px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animate-slide-up {
+    animation: slideUp 0.6s ease-out 0.3s forwards;
+    opacity: 0;
+  }
+
+  /* Scan line animation */
+  @keyframes scan {
+    0% {
+      transform: translateY(-100%);
+    }
+    100% {
+      transform: translateY(100%);
+    }
+  }
+
+  .animate-scan {
+    animation: scan 8s linear infinite;
+  }
+
+  /* Pulse with delay */
+  .delay-500 {
+    animation-delay: 500ms;
+  }
+
+  .delay-1000 {
+    animation-delay: 1000ms;
+  }
+
+  .delay-2000 {
+    animation-delay: 2000ms;
+  }
+
+  .delay-3000 {
+    animation-delay: 3000ms;
+  }
+
+  /* Enhanced hover scale animation */
+  @keyframes gentleScale {
+    0%,
+    100% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.02);
+    }
+  }
+
+  .animate-gentle-scale:hover {
+    animation: gentleScale 2s ease-in-out infinite;
+  }
+
+  /* Floating animation for background elements */
+  @keyframes float {
+    0%,
+    100% {
+      transform: translateY(0px) rotate(0deg);
+    }
+    50% {
+      transform: translateY(-20px) rotate(2deg);
+    }
+  }
+
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+
+  /* Breathing glow animation */
+  @keyframes breathe {
+    0%,
+    100% {
+      opacity: 0.6;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 1;
+      transform: scale(1.05);
+    }
+  }
+
+  .animate-breathe {
+    animation: breathe 4s ease-in-out infinite;
+  }
+
+  /* Mesh gradient animations */
+  @keyframes mesh-gradient {
+    0%,
+    100% {
+      transform: translate(0%, 0%) rotate(0deg) scale(1);
+    }
+    33% {
+      transform: translate(5%, -5%) rotate(120deg) scale(1.1);
+    }
+    66% {
+      transform: translate(-5%, 5%) rotate(240deg) scale(0.9);
+    }
+  }
+
+  @keyframes mesh-gradient-reverse {
+    0%,
+    100% {
+      transform: translate(0%, 0%) rotate(0deg) scale(1);
+    }
+    33% {
+      transform: translate(-5%, 5%) rotate(-120deg) scale(1.1);
+    }
+    66% {
+      transform: translate(5%, -5%) rotate(-240deg) scale(0.9);
+    }
+  }
+
+  .animate-mesh-gradient {
+    animation: mesh-gradient 20s ease-in-out infinite;
+  }
+
+  .animate-mesh-gradient-reverse {
+    animation: mesh-gradient-reverse 25s ease-in-out infinite;
+  }
+
+  /* Particle animation */
+  @keyframes particle {
+    0% {
+      transform: translateY(0) translateX(0);
+      opacity: 0;
+    }
+    10% {
+      opacity: 1;
+    }
+    90% {
+      opacity: 1;
+    }
+    100% {
+      transform: translateY(-100vh) translateX(50px);
+      opacity: 0;
+    }
+  }
+
+  .animate-particle {
+    animation: particle linear infinite;
+  }
+
+  /* Entrance animation */
+  @keyframes entrance {
+    from {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  .animate-entrance {
+    animation: entrance 0.8s ease-out forwards;
+  }
+
+  /* Scale in animation */
+  @keyframes scaleIn {
+    from {
+      opacity: 0;
+      transform: scale(0.9);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  .animate-scale-in {
+    animation: scaleIn 0.6s ease-out forwards;
+  }
+
+  .animate-scale-in-delayed {
+    animation: scaleIn 0.6s ease-out 0.2s forwards;
+    opacity: 0;
+  }
+
+  /* Fade in down */
+  @keyframes fadeInDown {
+    from {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animate-fade-in-down {
+    animation: fadeInDown 0.5s ease-out forwards;
+  }
+
+  /* Smooth scan */
+  @keyframes scanSmooth {
+    0% {
+      transform: translateY(-100%);
+    }
+    100% {
+      transform: translateY(200%);
+    }
+  }
+
+  .animate-scan-smooth {
+    animation: scanSmooth 6s ease-in-out infinite;
+  }
+
+  /* Slide up smooth */
+  @keyframes slideUpSmooth {
+    from {
+      opacity: 0;
+      transform: translateY(60px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animate-slide-up-smooth {
+    animation: slideUpSmooth 0.7s ease-out 0.4s forwards;
+    opacity: 0;
+  }
+
+  /* Delay variations */
+  .delay-300 {
+    animation-delay: 300ms;
+  }
+
+  .delay-700 {
+    animation-delay: 700ms;
+  }
+
+  /* Slow floating animations for large orbs */
+  @keyframes floatSlow {
+    0%,
+    100% {
+      transform: translate(0, 0) rotate(0deg);
+    }
+    33% {
+      transform: translate(30px, -30px) rotate(120deg);
+    }
+    66% {
+      transform: translate(-30px, 30px) rotate(240deg);
+    }
+  }
+
+  @keyframes floatSlowReverse {
+    0%,
+    100% {
+      transform: translate(0, 0) rotate(0deg);
+    }
+    33% {
+      transform: translate(-30px, 30px) rotate(-120deg);
+    }
+    66% {
+      transform: translate(30px, -30px) rotate(-240deg);
+    }
+  }
+
+  .animate-float-slow {
+    animation: floatSlow 30s ease-in-out infinite;
+  }
+
+  .animate-float-slow-reverse {
+    animation: floatSlowReverse 35s ease-in-out infinite;
+  }
+
+  /* Radial gradient background */
+  .bg-gradient-radial {
+    background: radial-gradient(circle, var(--tw-gradient-stops));
   }
 }
