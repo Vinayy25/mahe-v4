@@ -63,8 +63,11 @@ function InteractiveAvatar() {
   const { startVoiceChat } = useVoiceChat();
 
   const [config, setConfig] = useState<StartAvatarRequest>(DEFAULT_CONFIG);
+  const [isFullscreen, setIsFullscreen] = useState(false);
 
   const mediaStream = useRef<HTMLVideoElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const hasAutoEnteredFullscreen = useRef(false);
 
   async function fetchAccessToken() {
     try {
@@ -81,6 +84,28 @@ function InteractiveAvatar() {
       throw error;
     }
   }
+
+  const enterFullscreen = async () => {
+    try {
+      if (containerRef.current) {
+        await containerRef.current.requestFullscreen();
+        setIsFullscreen(true);
+      }
+    } catch (error) {
+      console.error("Error entering fullscreen:", error);
+    }
+  };
+
+  const exitFullscreen = async () => {
+    try {
+      if (document.fullscreenElement) {
+        await document.exitFullscreen();
+        setIsFullscreen(false);
+      }
+    } catch (error) {
+      console.error("Error exiting fullscreen:", error);
+    }
+  };
 
   const startSessionV2 = useMemoizedFn(async (isVoiceChat: boolean) => {
     try {
@@ -141,8 +166,38 @@ function InteractiveAvatar() {
     }
   }, [mediaStream, stream]);
 
+  // Auto-enter fullscreen when avatar connects (only once)
+  useEffect(() => {
+    if (
+      sessionState === StreamingAvatarSessionState.CONNECTED &&
+      !hasAutoEnteredFullscreen.current
+    ) {
+      hasAutoEnteredFullscreen.current = true;
+      setTimeout(() => {
+        enterFullscreen();
+      }, 500);
+    }
+
+    // Reset flag when session ends
+    if (sessionState === StreamingAvatarSessionState.INACTIVE) {
+      hasAutoEnteredFullscreen.current = false;
+    }
+  }, [sessionState]);
+
+  // Handle fullscreen change events
+  useEffect(() => {
+    const handleFullscreenChange = () => {
+      setIsFullscreen(!!document.fullscreenElement);
+    };
+
+    document.addEventListener("fullscreenchange", handleFullscreenChange);
+    return () => {
+      document.removeEventListener("fullscreenchange", handleFullscreenChange);
+    };
+  }, []);
+
   return (
-    <div className="w-full min-h-screen relative">
+    <div ref={containerRef} className="w-full min-h-screen relative">
       {sessionState === StreamingAvatarSessionState.INACTIVE ? (
         <Vortex
           backgroundColor="black"
@@ -285,10 +340,41 @@ function InteractiveAvatar() {
             )}
           </div>
 
-          {/* Modern Floating End Session Button - Top Right */}
+          {/* Top Right Controls */}
           {(sessionState === StreamingAvatarSessionState.CONNECTED ||
             sessionState === StreamingAvatarSessionState.CONNECTING) && (
-            <div className="fixed top-8 right-8 z-50 animate-fade-in-down">
+            <div className="fixed top-8 right-8 z-50 flex items-center gap-3 animate-fade-in-down">
+              {/* Fullscreen Toggle Button */}
+              <button
+                onClick={isFullscreen ? exitFullscreen : enterFullscreen}
+                className="group relative flex items-center justify-center p-3.5 rounded-full border border-white/30 bg-gradient-to-br from-white/10 via-white/5 to-white/10 backdrop-blur-2xl shadow-[0_8px_32px_rgba(0,0,0,0.4)] hover:shadow-[0_12px_48px_rgba(59,130,246,0.3)] transition-all duration-300 hover:scale-105 hover:border-blue-400/50"
+                title={isFullscreen ? "Exit Fullscreen" : "Enter Fullscreen"}
+              >
+                <svg
+                  className="w-5 h-5 text-white/70 group-hover:text-blue-400 transition-colors duration-300"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  {isFullscreen ? (
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M6 18L18 6M6 6l12 12"
+                    />
+                  ) : (
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"
+                    />
+                  )}
+                </svg>
+              </button>
+
+              {/* End Session Button */}
               <button
                 onClick={stopAvatar}
                 className="group relative flex items-center gap-3 px-6 py-3.5 rounded-full border border-white/30 bg-gradient-to-br from-white/10 via-white/5 to-white/10 backdrop-blur-2xl shadow-[0_8px_32px_rgba(0,0,0,0.4)] hover:shadow-[0_12px_48px_rgba(239,68,68,0.3)] transition-all duration-300 hover:scale-105 hover:border-red-400/50"
