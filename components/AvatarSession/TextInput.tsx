@@ -1,8 +1,6 @@
-import { TaskType, TaskMode } from "@heygen/streaming-avatar";
 import React, { useCallback, useEffect, useState } from "react";
 import { usePrevious } from "ahooks";
 
-import { Select } from "../Select";
 import { Button } from "../Button";
 import { SendIcon } from "../Icons";
 import { useTextChat } from "../logic/useTextChat";
@@ -10,36 +8,17 @@ import { Input } from "../Input";
 import { useConversationState } from "../logic/useConversationState";
 
 export const TextInput: React.FC = () => {
-  const { sendMessage, sendMessageSync, repeatMessage, repeatMessageSync } =
-    useTextChat();
+  const { sendMessage } = useTextChat();
   const { startListening, stopListening } = useConversationState();
-  const [taskType, setTaskType] = useState<TaskType>(TaskType.TALK);
-  const [taskMode, setTaskMode] = useState<TaskMode>(TaskMode.ASYNC);
   const [message, setMessage] = useState("");
 
   const handleSend = useCallback(() => {
     if (message.trim() === "") {
       return;
     }
-    if (taskType === TaskType.TALK) {
-      taskMode === TaskMode.SYNC
-        ? sendMessageSync(message)
-        : sendMessage(message);
-    } else {
-      taskMode === TaskMode.SYNC
-        ? repeatMessageSync(message)
-        : repeatMessage(message);
-    }
+    sendMessage(message);
     setMessage("");
-  }, [
-    taskType,
-    taskMode,
-    message,
-    sendMessage,
-    sendMessageSync,
-    repeatMessage,
-    repeatMessageSync,
-  ]);
+  }, [message, sendMessage]);
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -64,28 +43,17 @@ export const TextInput: React.FC = () => {
   }, [message, previousText, startListening, stopListening]);
 
   return (
-    <div className="flex flex-row gap-2 items-end w-full">
-      <Select
-        isSelected={(option) => option === taskType}
-        options={Object.values(TaskType)}
-        renderOption={(option) => option.toUpperCase()}
-        value={taskType.toUpperCase()}
-        onSelect={setTaskType}
-      />
-      <Select
-        isSelected={(option) => option === taskMode}
-        options={Object.values(TaskMode)}
-        renderOption={(option) => option.toUpperCase()}
-        value={taskMode.toUpperCase()}
-        onSelect={setTaskMode}
-      />
+    <div className="flex flex-row gap-3 items-center w-full max-w-3xl mx-auto">
       <Input
-        className="min-w-[500px]"
-        placeholder={`Type something for the avatar to ${taskType === TaskType.REPEAT ? "repeat" : "respond"}...`}
+        className="flex-1 !bg-white/10 !border-white/20 !backdrop-blur-xl !text-white placeholder:!text-white/50 !rounded-xl !shadow-2xl focus:!border-white/30 transition-all"
+        placeholder="Type your message here..."
         value={message}
         onChange={setMessage}
       />
-      <Button className="!p-2" onClick={handleSend}>
+      <Button
+        className="!p-3 !bg-white/10 !border !border-white/20 !backdrop-blur-xl !shadow-2xl hover:!bg-white/20 transition-all duration-200 !rounded-xl"
+        onClick={handleSend}
+      >
         <SendIcon size={20} />
       </Button>
     </div>

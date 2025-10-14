@@ -18,9 +18,10 @@ export const AvatarControls: React.FC = () => {
   const { interrupt } = useInterrupt();
 
   return (
-    <div className="flex flex-col gap-3 relative w-full items-center">
+    <div className="flex flex-col gap-6 relative w-full items-center -mt-8 mb-8">
+      {/* Glassmorphic Toggle Group - Positioned Higher */}
       <ToggleGroup
-        className={`bg-zinc-700 rounded-lg p-1 ${isVoiceChatLoading ? "opacity-50" : ""}`}
+        className={`rounded-2xl border border-white/20 bg-white/10 backdrop-blur-xl p-1.5 shadow-2xl transition-all duration-300 ${isVoiceChatLoading ? "opacity-50" : ""}`}
         disabled={isVoiceChatLoading}
         type="single"
         value={isVoiceChatActive || isVoiceChatLoading ? "voice" : "text"}
@@ -37,22 +38,35 @@ export const AvatarControls: React.FC = () => {
         }}
       >
         <ToggleGroupItem
-          className="data-[state=on]:bg-zinc-800 rounded-lg p-2 text-sm w-[90px] text-center"
+          className="data-[state=on]:bg-white/20 data-[state=on]:shadow-lg rounded-xl px-8 py-3 text-sm font-medium w-[130px] text-center text-white/80 data-[state=on]:text-white transition-all duration-200 hover:bg-white/10"
           value="voice"
         >
-          Voice Chat
+          🎤 Voice
         </ToggleGroupItem>
         <ToggleGroupItem
-          className="data-[state=on]:bg-zinc-800 rounded-lg p-2 text-sm w-[90px] text-center"
+          className="data-[state=on]:bg-white/20 data-[state=on]:shadow-lg rounded-xl px-8 py-3 text-sm font-medium w-[130px] text-center text-white/80 data-[state=on]:text-white transition-all duration-200 hover:bg-white/10"
           value="text"
         >
-          Text Chat
+          💬 Text
         </ToggleGroupItem>
       </ToggleGroup>
-      {isVoiceChatActive || isVoiceChatLoading ? <AudioInput /> : <TextInput />}
-      <div className="absolute top-[-70px] right-3">
-        <Button className="!bg-zinc-700 !text-white" onClick={interrupt}>
-          Interrupt
+
+      {/* Input with glassmorphism */}
+      <div className="w-full">
+        {isVoiceChatActive || isVoiceChatLoading ? (
+          <AudioInput />
+        ) : (
+          <TextInput />
+        )}
+      </div>
+
+      {/* Glassmorphic Interrupt Button */}
+      <div className="absolute -top-24 right-4">
+        <Button
+          className="!bg-white/10 !text-white !border !border-white/20 !backdrop-blur-xl !shadow-2xl hover:!bg-white/20 transition-all duration-200 !rounded-xl !px-5 !py-2"
+          onClick={interrupt}
+        >
+          ⏸️ Interrupt
         </Button>
       </div>
     </div>
