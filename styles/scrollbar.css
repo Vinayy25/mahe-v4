@@ -1,0 +1,24 @@
+/* Custom scrollbar styles for subtitle container */
+.subtitle-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(34, 211, 238, 0.5) transparent;
+  scroll-behavior: smooth;
+}
+
+.subtitle-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.subtitle-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.subtitle-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(34, 211, 238, 0.5);
+  border-radius: 3px;
+  transition: background 0.3s ease;
+}
+
+.subtitle-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(34, 211, 238, 0.7);
+}
