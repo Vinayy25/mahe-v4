@@ -88,7 +88,18 @@ function InteractiveAvatar() {
     try {
       const elem = document.documentElement;
       if (elem.requestFullscreen) {
-        await elem.requestFullscreen();
+        await elem.requestFullscreen().catch((err) => {
+          console.warn("Fullscreen request was denied:", err.message);
+        });
+      } else if ((elem as any).webkitRequestFullscreen) {
+        // Safari
+        (elem as any).webkitRequestFullscreen();
+      } else if ((elem as any).mozRequestFullScreen) {
+        // Firefox
+        (elem as any).mozRequestFullScreen();
+      } else if ((elem as any).msRequestFullscreen) {
+        // IE11
+        (elem as any).msRequestFullscreen();
       }
     } catch (error) {
       console.error("Error entering fullscreen:", error);
@@ -97,6 +108,9 @@ function InteractiveAvatar() {
 
   const startSessionV2 = useMemoizedFn(async (isVoiceChat: boolean) => {
     try {
+      // Trigger fullscreen immediately on user interaction
+      await enterFullscreen();
+
       const newToken = await fetchAccessToken();
       const avatar = initAvatar(newToken);
 
