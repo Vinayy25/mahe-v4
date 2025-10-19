@@ -7,11 +7,17 @@ import NavBar from "@/components/NavBar";
 const fontSans = FontSans({
   subsets: ["latin"],
   variable: "--font-sans",
+  display: "swap",
+  fallback: ["system-ui", "arial"],
+  adjustFontFallback: true,
 });
 
 const fontMono = FontMono({
   subsets: ["latin"],
   variable: "--font-geist-mono",
+  display: "swap",
+  fallback: ["monospace"],
+  adjustFontFallback: true,
 });
 
 export const metadata: Metadata = {
