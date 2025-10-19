@@ -20,7 +20,6 @@ import { LoadingIcon } from "./Icons";
 import { Vortex } from "@/components/ui/vortex";
 import ColourfulText from "@/components/ui/colourful-text";
 import { Button as MovingBorderButton } from "@/components/ui/moving-border";
-import DottedGlowBackground from "@/components/ui/dotted-glow-background";
 
 import { AVATARS } from "@/app/lib/constants";
 
@@ -63,8 +62,7 @@ function InteractiveAvatar() {
     useStreamingAvatarSession();
   const { startVoiceChat } = useVoiceChat();
 
-  const [config, setConfig] = useState<StartAvatarRequest>(DEFAULT_CONFIG);
-  const [isFullscreen, setIsFullscreen] = useState(false);
+  const [config] = useState<StartAvatarRequest>(DEFAULT_CONFIG);
 
   const mediaStream = useRef<HTMLVideoElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -88,23 +86,12 @@ function InteractiveAvatar() {
 
   const enterFullscreen = async () => {
     try {
-      if (containerRef.current) {
-        await containerRef.current.requestFullscreen();
-        setIsFullscreen(true);
+      const elem = document.documentElement;
+      if (elem.requestFullscreen) {
+        await elem.requestFullscreen();
       }
     } catch (error) {
       console.error("Error entering fullscreen:", error);
-    }
-  };
-
-  const exitFullscreen = async () => {
-    try {
-      if (document.fullscreenElement) {
-        await document.exitFullscreen();
-        setIsFullscreen(false);
-      }
-    } catch (error) {
-      console.error("Error exiting fullscreen:", error);
     }
   };
 
@@ -188,7 +175,7 @@ function InteractiveAvatar() {
   // Handle fullscreen change events
   useEffect(() => {
     const handleFullscreenChange = () => {
-      setIsFullscreen(!!document.fullscreenElement);
+      // Event listener for fullscreen changes
     };
 
     document.addEventListener("fullscreenchange", handleFullscreenChange);
@@ -228,7 +215,6 @@ function InteractiveAvatar() {
         </Vortex>
       ) : (
         <div className="w-screen min-h-screen fixed inset-0 overflow-hidden bg-slate-950">
-
           {/* Main content */}
           <div className="relative z-10 w-full min-h-screen flex items-center justify-center p-4 md:p-8 pb-12 md:pb-16">
             {sessionState === StreamingAvatarSessionState.CONNECTING ? (
@@ -245,26 +231,16 @@ function InteractiveAvatar() {
                   <div className="relative">
                     <LoadingIcon />
                   </div>
-                <div className="text-center">
-                  <p className="text-2xl text-white font-light mb-2">
-                    Initializing AI Avatar
-                  </p>
-                  <p className="text-gray-400">Please wait a moment...</p>
+                  <div className="text-center">
+                    <p className="text-2xl text-white font-light mb-2">
+                      Initializing AI Avatar
+                    </p>
+                    <p className="text-gray-400">Please wait a moment...</p>
+                  </div>
                 </div>
-              </div>
               </>
             ) : (
               <div className="w-full max-w-7xl mx-auto">
-                {/* Live Status Pill */}
-                <div className="absolute right-8 top-8 z-20">
-                  <div className="flex items-center gap-2 rounded-full border border-white/20 bg-white/10 backdrop-blur-xl px-5 py-2 text-sm font-medium text-white shadow-2xl">
-                    <span className="relative inline-flex h-3 w-3">
-                      <span className="relative inline-flex h-3 w-3 rounded-full bg-green-500" />
-                    </span>
-                    Live
-                  </div>
-                </div>
-
                 {/* Avatar Display Container - Simplified */}
                 <div className="relative mb-16">
                   {/* Simple Container */}
@@ -296,38 +272,29 @@ function InteractiveAvatar() {
             <div className="fixed top-8 right-8 z-50 flex items-center gap-3">
               {/* Fullscreen Toggle Button */}
               <button
-                onClick={isFullscreen ? exitFullscreen : enterFullscreen}
-                className="flex items-center justify-center p-3.5 rounded-full border border-white/30 bg-white/10 backdrop-blur-2xl shadow-lg"
-                title={isFullscreen ? "Exit Fullscreen" : "Enter Fullscreen"}
+                onClick={() => enterFullscreen()}
+                className="flex items-center justify-center p-3.5 rounded-full border border-white/30 bg-white/10 backdrop-blur-2xl shadow-lg hover:bg-white/20 transition-colors duration-200"
+                title="Enter Fullscreen"
               >
                 <svg
-                  className="w-5 h-5 text-white/70"
+                  className="w-5 h-5 text-white/70 hover:text-white transition-colors"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
                 >
-                  {isFullscreen ? (
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M6 18L18 6M6 6l12 12"
-                    />
-                  ) : (
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"
-                    />
-                  )}
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"
+                  />
                 </svg>
               </button>
 
               {/* End Session Button */}
               <button
                 onClick={stopAvatar}
-                className="flex items-center gap-3 px-6 py-3.5 rounded-full border border-white/30 bg-white/10 backdrop-blur-2xl shadow-lg"
+                className="flex items-center gap-3 px-6 py-3.5 rounded-full border border-white/30 bg-white/10 backdrop-blur-2xl shadow-lg hover:bg-white/20 transition-colors duration-200"
               >
                 {/* Content */}
                 <div className="relative flex items-center gap-3">

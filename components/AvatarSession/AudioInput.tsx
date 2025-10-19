@@ -14,7 +14,7 @@ export const AudioInput: React.FC = () => {
   const [currentSubtitle, setCurrentSubtitle] = useState<string>("");
   const [isScrollable, setIsScrollable] = useState<boolean>(false);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
-  
+
   // Threshold for when scrolling should activate (characters)
   const SCROLL_THRESHOLD = 200;
   const MAX_LINES = 4;
@@ -49,18 +49,18 @@ export const AudioInput: React.FC = () => {
 
   // Handle manual scrolling - pause auto-scroll temporarily
   const [isManualScrolling, setIsManualScrolling] = useState(false);
-  const scrollTimeoutRef = useRef<NodeJS.Timeout>();
+  const scrollTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const handleScroll = () => {
     if (!isScrollable) return;
-    
+
     setIsManualScrolling(true);
-    
+
     // Clear existing timeout
     if (scrollTimeoutRef.current) {
       clearTimeout(scrollTimeoutRef.current);
     }
-    
+
     // Resume auto-scroll after 3 seconds of no manual scrolling
     scrollTimeoutRef.current = setTimeout(() => {
       setIsManualScrolling(false);
@@ -68,19 +68,21 @@ export const AudioInput: React.FC = () => {
   };
 
   // Enhanced auto-scroll that respects manual scrolling
-   useEffect(() => {
-     if (scrollContainerRef.current && isScrollable && !isManualScrolling) {
-       const container = scrollContainerRef.current;
-       const isNearBottom = container.scrollHeight - container.scrollTop - container.clientHeight < 20;
-       
-       // Only auto-scroll if user is near the bottom or if it's new content
-       if (isNearBottom || currentSubtitle) {
-         setTimeout(() => {
-           container.scrollTop = container.scrollHeight;
-         }, 200); // Increased delay for smoother experience
-       }
-     }
-   }, [currentSubtitle, isScrollable, isManualScrolling]);
+  useEffect(() => {
+    if (scrollContainerRef.current && isScrollable && !isManualScrolling) {
+      const container = scrollContainerRef.current;
+      const isNearBottom =
+        container.scrollHeight - container.scrollTop - container.clientHeight <
+        20;
+
+      // Only auto-scroll if user is near the bottom or if it's new content
+      if (isNearBottom || currentSubtitle) {
+        setTimeout(() => {
+          container.scrollTop = container.scrollHeight;
+        }, 200); // Increased delay for smoother experience
+      }
+    }
+  }, [currentSubtitle, isScrollable, isManualScrolling]);
 
   // Cleanup timeout on unmount
   useEffect(() => {
@@ -119,33 +121,34 @@ export const AudioInput: React.FC = () => {
                     onScroll={handleScroll}
                     className={`
                       text-white text-center text-sm sm:text-base md:text-lg lg:text-xl font-medium leading-relaxed tracking-wide drop-shadow-lg
-                      ${isScrollable 
-                        ? 'max-h-40 overflow-y-auto subtitle-scrollbar' 
-                        : 'max-h-none'
+                      ${
+                        isScrollable
+                          ? "max-h-40 overflow-y-auto subtitle-scrollbar"
+                          : "max-h-none"
                       }
                       scroll-smooth transition-all duration-300
                     `}
                   >
                     {currentSubtitle}
                   </div>
-                  
-                    {/* Scroll indicators */}
-                     {isScrollable && (
-                       <>
-                         {/* Top fade indicator */}
-                         <div className="absolute top-4 left-0 right-0 h-3 bg-gradient-to-b from-gray-900/60 to-transparent pointer-events-none z-10" />
-                         {/* Bottom fade indicator */}
-                         <div className="absolute bottom-4 left-0 right-0 h-3 bg-gradient-to-t from-gray-900/60 to-transparent pointer-events-none z-10" />
-                         {/* Scroll hint with better positioning */}
-                         <div className="absolute bottom-1 right-3 text-xs text-cyan-400/70 animate-pulse font-mono">
-                           {isManualScrolling ? '⏸' : '↕'}
-                         </div>
-                         {/* Content length indicator */}
-                         <div className="absolute top-1 left-3 text-xs text-cyan-400/50 font-mono">
-                           {Math.ceil(currentSubtitle.length / 50)} lines
-                         </div>
-                       </>
-                     )}
+
+                  {/* Scroll indicators */}
+                  {isScrollable && (
+                    <>
+                      {/* Top fade indicator */}
+                      <div className="absolute top-4 left-0 right-0 h-3 bg-gradient-to-b from-gray-900/60 to-transparent pointer-events-none z-10" />
+                      {/* Bottom fade indicator */}
+                      <div className="absolute bottom-4 left-0 right-0 h-3 bg-gradient-to-t from-gray-900/60 to-transparent pointer-events-none z-10" />
+                      {/* Scroll hint with better positioning */}
+                      <div className="absolute bottom-1 right-3 text-xs text-cyan-400/70 animate-pulse font-mono">
+                        {isManualScrolling ? "⏸" : "↕"}
+                      </div>
+                      {/* Content length indicator */}
+                      <div className="absolute top-1 left-3 text-xs text-cyan-400/50 font-mono">
+                        {Math.ceil(currentSubtitle.length / 50)} lines
+                      </div>
+                    </>
+                  )}
                 </div>
 
                 {/* Bottom accent corners */}
