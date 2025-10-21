@@ -43,18 +43,18 @@ export const TextInput: React.FC = () => {
   }, [message, previousText, startListening, stopListening]);
 
   return (
-    <div className="flex flex-row gap-3 items-center w-full max-w-3xl mx-auto">
+    <div className="flex flex-row gap-2 sm:gap-3 items-center w-full max-w-xs sm:max-w-sm md:max-w-lg lg:max-w-2xl xl:max-w-3xl mx-auto">
       <Input
-        className="flex-1 !bg-white/10 !border-white/20 !backdrop-blur-xl !text-white placeholder:!text-white/50 !rounded-xl !shadow-2xl focus:!border-white/30 transition-all"
+        className="flex-1 !bg-white/10 !border-white/20 !backdrop-blur-xl !text-white placeholder:!text-white/50 !rounded-lg sm:!rounded-xl !shadow-2xl focus:!border-white/30 transition-all !text-xs sm:!text-sm !px-2 sm:!px-3 md:!px-4 !py-2 sm:!py-2.5 md:!py-3"
         placeholder="Type your message here..."
         value={message}
-        onChange={setMessage}
+        onChange={(value: string) => setMessage(value)}
       />
       <Button
-        className="!p-3 !bg-white/10 !border !border-white/20 !backdrop-blur-xl !shadow-2xl hover:!bg-white/20 transition-all duration-200 !rounded-xl"
+        className="!bg-white/10 !text-white !border !border-white/20 !backdrop-blur-xl !shadow-2xl hover:!bg-white/20 transition-all duration-200 !rounded-lg sm:!rounded-xl !px-2 sm:!px-3 md:!px-4 !py-2 sm:!py-2.5 md:!py-3"
         onClick={handleSend}
       >
-        <SendIcon size={20} />
+        <SendIcon className="w-3 sm:w-4 h-3 sm:h-4" />
       </Button>
     </div>
   );

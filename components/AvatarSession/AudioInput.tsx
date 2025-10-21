@@ -94,7 +94,7 @@ export const AudioInput: React.FC = () => {
   }, []);
 
   return (
-    <div className="flex items-center justify-center w-full max-w-7xl mx-auto">
+    <div className="flex items-center justify-center w-full relative">
       <AnimatePresence mode="wait">
         {currentSubtitle ? (
           <motion.div
@@ -102,28 +102,28 @@ export const AudioInput: React.FC = () => {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 10 }}
             transition={{ duration: 0.3 }}
-            className="w-full max-w-7xl"
+            className="w-full max-w-xs sm:max-w-sm md:max-w-2xl lg:max-w-4xl xl:max-w-6xl 2xl:max-w-7xl mx-auto px-1 sm:px-2 md:px-4"
           >
             {/* Glassmorphic Subtitle Container */}
             <div className="relative group">
               {/* Glow effect */}
-              <div className="absolute -inset-2 bg-gradient-to-r from-cyan-500/30 via-blue-500/30 to-purple-500/30 rounded-2xl blur-xl opacity-60 group-hover:opacity-80 transition-opacity duration-300" />
+              <div className="absolute -inset-1 sm:-inset-2 bg-gradient-to-r from-cyan-500/30 via-blue-500/30 to-purple-500/30 rounded-lg sm:rounded-xl md:rounded-2xl blur-xl opacity-60 group-hover:opacity-80 transition-opacity duration-300" />
 
               {/* Main subtitle box */}
-              <div className="relative rounded-2xl border border-white/20 bg-transparent backdrop-blur-sm shadow-lg">
+              <div className="relative rounded-lg sm:rounded-xl md:rounded-2xl border border-white/20 bg-transparent backdrop-blur-sm shadow-lg">
                 {/* Top accent line */}
                 <div className="absolute top-0 left-1/2 -translate-x-1/2 w-1/3 h-px bg-gradient-to-r from-transparent via-cyan-400/60 to-transparent" />
 
                 {/* Subtitle text container */}
-                <div className="relative px-4 sm:px-6 md:px-8 py-4 sm:py-5 md:py-6">
+                <div className="relative px-2 sm:px-3 md:px-4 lg:px-6 xl:px-8 py-2 sm:py-3 md:py-4 lg:py-5 xl:py-6">
                   <div
                     ref={scrollContainerRef}
                     onScroll={handleScroll}
                     className={`
-                      text-white text-center text-sm sm:text-base md:text-lg lg:text-xl font-medium leading-relaxed tracking-wide drop-shadow-lg
+                      text-white text-center text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl font-medium leading-relaxed tracking-wide drop-shadow-lg
                       ${
                         isScrollable
-                          ? "max-h-40 overflow-y-auto subtitle-scrollbar"
+                          ? "max-h-24 sm:max-h-32 md:max-h-40 overflow-y-auto subtitle-scrollbar"
                           : "max-h-none"
                       }
                       scroll-smooth transition-all duration-300
@@ -136,54 +136,82 @@ export const AudioInput: React.FC = () => {
                   {isScrollable && (
                     <>
                       {/* Top fade indicator */}
-                      <div className="absolute top-4 left-0 right-0 h-3 bg-gradient-to-b from-gray-900/60 to-transparent pointer-events-none z-10" />
+                      <div className="absolute top-2 sm:top-3 md:top-4 left-0 right-0 h-2 sm:h-3 bg-gradient-to-b from-gray-900/60 to-transparent pointer-events-none z-10" />
                       {/* Bottom fade indicator */}
-                      <div className="absolute bottom-4 left-0 right-0 h-3 bg-gradient-to-t from-gray-900/60 to-transparent pointer-events-none z-10" />
+                      <div className="absolute bottom-2 sm:bottom-3 md:bottom-4 left-0 right-0 h-2 sm:h-3 bg-gradient-to-t from-gray-900/60 to-transparent pointer-events-none z-10" />
                       {/* Scroll hint with better positioning */}
-                      <div className="absolute bottom-1 right-3 text-xs text-cyan-400/70 animate-pulse font-mono">
+                      <div className="absolute bottom-0.5 sm:bottom-1 right-1 sm:right-2 md:right-3 text-xs text-cyan-400/70 animate-pulse font-mono">
                         {isManualScrolling ? "⏸" : "↕"}
                       </div>
                       {/* Content length indicator */}
-                      <div className="absolute top-1 left-3 text-xs text-cyan-400/50 font-mono">
+                      <div className="absolute top-0.5 sm:top-1 left-1 sm:left-2 md:left-3 text-xs text-cyan-400/50 font-mono">
                         {Math.ceil(currentSubtitle.length / 50)} lines
                       </div>
                     </>
                   )}
                 </div>
 
-                {/* Bottom accent corners */}
-                <div className="absolute bottom-2 left-2 w-4 h-4 border-b border-l border-cyan-400/40 rounded-bl-lg" />
-                <div className="absolute bottom-2 right-2 w-4 h-4 border-b border-r border-purple-400/40 rounded-br-lg" />
+                {/* Bottom accent line */}
+                <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-1/4 h-px bg-gradient-to-r from-transparent via-purple-400/60 to-transparent" />
               </div>
             </div>
           </motion.div>
         ) : (
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="flex items-center justify-center"
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.9 }}
+            transition={{ duration: 0.4 }}
+            className="flex flex-col items-center gap-3 sm:gap-4 md:gap-6"
           >
-            <div
-              className={`p-4 relative bg-white/10 border border-white/20 backdrop-blur-xl shadow-2xl rounded-full ${isUserTalking ? "border-cyan-400/60" : ""}`}
-            >
-              {/* Voice Activity Ring */}
+            {/* Voice Activity Indicator - Simplified */}
+            <div className="relative">
+              {/* Main circle - reduced size */}
               <div
-                className={`absolute left-0 top-0 rounded-full border-2 w-full h-full transition-all duration-200 ${
+                className={`relative w-12 sm:w-14 md:w-16 lg:w-18 xl:w-20 h-12 sm:h-14 md:h-16 lg:h-18 xl:h-20 rounded-full border-2 transition-all duration-300 backdrop-blur-xl shadow-2xl ${
                   isUserTalking
-                    ? "border-cyan-400 animate-ping opacity-75"
-                    : "border-transparent"
-                }`}
-              />
-              {isVoiceChatLoading ? (
-                <LoadingIcon className="animate-spin" size={24} />
-              ) : (
-                <div className="w-6 h-6 rounded-full bg-cyan-400" />
-              )}
+                    ? "border-green-400/60 bg-green-400/10"
+                    : "border-blue-400/40 bg-blue-400/5"
+                } flex items-center justify-center`}
+              >
+                {/* Microphone Icon - smaller size */}
+                <svg
+                  className={`w-4 sm:w-5 md:w-6 lg:w-7 xl:w-8 h-4 sm:h-5 md:h-6 lg:h-7 xl:h-8 transition-all duration-300 ${
+                    isUserTalking ? "text-green-400" : "text-blue-400/70"
+                  }`}
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z" />
+                  <path d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z" />
+                </svg>
+              </div>
+            </div>
+
+            {/* Status Text */}
+            <div className="text-center">
+              <p className="text-white/90 font-medium text-sm sm:text-base md:text-lg mb-1 sm:mb-2">
+                {isUserTalking ? "Listening..." : "Speak to continue"}
+              </p>
+              <p className="text-white/50 text-xs sm:text-sm">
+                {isUserTalking
+                  ? "I'm hearing you clearly"
+                  : "Voice chat is active"}
+              </p>
             </div>
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* Loading overlay */}
+      {isVoiceChatLoading && (
+        <div className="absolute inset-0 flex items-center justify-center bg-black/20 backdrop-blur-sm rounded-lg sm:rounded-xl md:rounded-2xl">
+          <div className="flex flex-col items-center gap-2 sm:gap-3 md:gap-4">
+            <LoadingIcon />
+            <p className="text-white/70 text-xs sm:text-sm">Initializing voice...</p>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
