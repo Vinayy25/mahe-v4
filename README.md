@@ -1,4 +1,4 @@
-# MAHE Dubai Interactive Avatar Platform
+# MAHE DUBAI DEMO 
 
 ![MAHE Dubai Logo](./public/mahe_logo.jpeg)
 
