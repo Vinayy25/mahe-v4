@@ -210,9 +210,12 @@ function InteractiveAvatar() {
         >
           <div className="text-center max-w-xs sm:max-w-md md:max-w-2xl lg:max-w-3xl xl:max-w-4xl mx-auto">
             <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl 2xl:text-6xl font-bold text-white mb-2 sm:mb-3 md:mb-4 leading-tight">
-              Welcome to <ColourfulText text="MAHE Dubai" /> – <br className="hidden sm:block" />
+              Welcome to <ColourfulText text="MAHE Dubai" /> –{" "}
+              <br className="hidden sm:block" />
               <ColourfulText text="Shaping Futures" />,{" "}
-              <ColourfulText text="Inspiring Minds" />
+              <span className="whitespace-nowrap">
+                <ColourfulText text="Inspiring Minds" />
+              </span>
             </h1>
             <p className="text-sm sm:text-base md:text-lg lg:text-xl text-gray-300 mb-4 sm:mb-6 md:mb-8 font-light px-2">
               Click below to talk to me and explore MAHE Dubai
