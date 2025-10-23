@@ -3,22 +3,21 @@ import React, { forwardRef } from "react";
 import { useStreamingAvatarSession } from "../logic/useStreamingAvatarSession";
 import { StreamingAvatarSessionState } from "../logic";
 
-export const AvatarVideo = forwardRef<HTMLVideoElement>(({}, ref) => {
-  const { sessionState } = useStreamingAvatarSession();
+interface AvatarVideoProps {
+  className?: string;
+}
 
+export const AvatarVideo = forwardRef<HTMLVideoElement, AvatarVideoProps>((props, ref) => {
+  const { sessionState } = useStreamingAvatarSession();
   const isLoaded = sessionState === StreamingAvatarSessionState.CONNECTED;
 
   return (
-    <>
+    <div className={`relative ${props.className ?? ''}`}>
       <video
         ref={ref}
         autoPlay
         playsInline
-        style={{
-          width: "100%",
-          height: "100%",
-          objectFit: "contain",
-        }}
+        className={props.className ?? 'w-full h-full object-contain'}
       >
         <track kind="captions" />
       </video>
@@ -31,7 +30,8 @@ export const AvatarVideo = forwardRef<HTMLVideoElement>(({}, ref) => {
           </div>
         </div>
       )}
-    </>
+    </div>
   );
 });
+
 AvatarVideo.displayName = "AvatarVideo";

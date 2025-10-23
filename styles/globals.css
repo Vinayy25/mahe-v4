@@ -374,4 +374,17 @@ li {
   .bg-gradient-radial {
     background: radial-gradient(circle, var(--tw-gradient-stops));
   }
+
+  /* Fullscreen overrides for the session wrapper */
+  .session-wrapper:fullscreen {
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
+    max-width: none;
+    padding: 0;
+    margin: 0;
+    border-radius: 0;
+    background: #000;
+  }
 }

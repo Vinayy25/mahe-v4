@@ -1,0 +1,32 @@
+[
+  {
+    "id": "1756646616434",
+    "sender": "CLIENT",
+    "content": "Hi."
+  },
+  {
+    "id": "1756646616812",
+    "sender": "AVATAR",
+    "content": "Hello and welcome! How can we assist you today? If you have any questions about our programs, admissions, or anything else related to MAHE Dubai, feel free to ask."
+  },
+  {
+    "id": "1756646632384",
+    "sender": "CLIENT",
+    "content": "Can you tell me more about, PhD?"
+  },
+  {
+    "id": "1756646632651",
+    "sender": "AVATAR",
+    "content": "At MAHE Dubai, we offer PhD programs across various disciplines, encouraging research and innovation. Our programs are designed to support in-depth study and scholarly work in your chosen field. To apply, you can explore the specific PhD programs available on our website and connect with our admissions team for detailed requirements and guidance. If you need help with the application process, just let us know!"
+  },
+  {
+    "id": "1756646650815",
+    "sender": "CLIENT",
+    "content": "Do you guys have an Nvidia GPU at your research facility?"
+  },
+  {
+    "id": "1756646651593",
+    "sender": "AVATAR",
+    "content": "While specific details about the equipment in our research facilities are not provided on our website, we do emphasize a commitment to supporting advanced research and innovation. Our facilities are equipped with state-of-the-art technology, which may include high-performance computing resources. For precise information, we recommend contacting our faculty or research committee directly. If you have further questions or need assistance, feel free to ask!"
+  }
+]
