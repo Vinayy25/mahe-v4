@@ -111,3 +111,23 @@ Feel free to play around with the existing code and leave feedback on the [HeyGe
 ## License
 
 This project is private and for demonstration purposes only.
+
+Useful commands for managing your app:
+# SSH into your server
+ssh -i "mahe-server.pem" ubuntu@ec2-43-205-199-30.ap-south-1.compute.amazonaws.com
+
+# Check app status
+pm2 status
+
+# View app logs
+pm2 logs nextjs-app
+
+# Restart the app
+pm2 restart nextjs-app
+
+# Stop the app
+pm2 stop nextjs-app
+
+# View NGINX logs
+sudo tail -f /var/log/nginx/access.log
+sudo tail -f /var/log/nginx/error.log
