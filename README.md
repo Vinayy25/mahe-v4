@@ -260,10 +260,24 @@ npm run type-check   # TypeScript type checking
 
 ## 📄 License
 
-This project is proprietary software developed for MAHE Dubai. All rights reserved.
+This project is private and for demonstration purposes only.
 
----
+Useful commands for managing your app:
+# SSH into your server
+ssh -i "mahe-server.pem" ubuntu@ec2-43-205-199-30.ap-south-1.compute.amazonaws.com
 
-**Built with ❤️ for MAHE Dubai**
+# Check app status
+pm2 status
 
-*Empowering education through innovative AI technology*
+# View app logs
+pm2 logs nextjs-app
+
+# Restart the app
+pm2 restart nextjs-app
+
+# Stop the app
+pm2 stop nextjs-app
+
+# View NGINX logs
+sudo tail -f /var/log/nginx/access.log
+sudo tail -f /var/log/nginx/error.log

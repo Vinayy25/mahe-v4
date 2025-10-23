@@ -31,39 +31,57 @@ export default function ColourfulText({ text }: { text: string }) {
     return () => clearInterval(interval);
   }, []);
 
+  // Split into tokens that preserve spaces. We'll animate characters
+  // but keep entire words unbroken using a non-wrapping span per word.
+  const tokens = text.split(/(\s+)/);
+  let globalIndex = -1;
+
   return (
     <>
-      {text.split("").map((char, index) => (
-        <motion.span
-          key={`${char}-${count}-${index}`}
-          initial={{
-            y: 0,
-          }}
-          animate={{
-            color: currentColors[index % currentColors.length],
-            y: [0, -3, 0],
-            scale: [1, 1.02, 1],
-            filter: ["blur(0px)", "blur(2px)", "blur(0px)"],
-            opacity: [1, 0.9, 1],
-            textShadow: [
-              `0 0 10px ${currentColors[index % currentColors.length]}40`,
-              `0 0 20px ${currentColors[index % currentColors.length]}60`,
-              `0 0 10px ${currentColors[index % currentColors.length]}40`,
-            ],
-          }}
-          transition={{
-            duration: 0.5,
-            delay: index * 0.05,
-          }}
-          className="inline-block whitespace-pre font-sans tracking-tight font-bold bg-clip-text"
-          style={{
-            textShadow: `0 1px 3px rgba(0,0,0,0.3), 0 0 20px ${currentColors[index % currentColors.length]}30`,
-            fontWeight: "700",
-          }}
-        >
-          {char}
-        </motion.span>
-      ))}
+      {tokens.map((token, tokenIdx) => {
+        // Render spaces as-is so the browser can wrap at word boundaries
+        if (token.trim() === "") {
+          return <span key={`space-${tokenIdx}`}>{token}</span>;
+        }
+
+        return (
+          <span
+            key={`word-${tokenIdx}`}
+            className="inline-block whitespace-nowrap"
+          >
+            {token.split("").map((char) => {
+              globalIndex += 1;
+              const colorIndex = globalIndex % currentColors.length;
+              return (
+                <motion.span
+                  key={`${char}-${count}-${globalIndex}`}
+                  initial={{ y: 0 }}
+                  animate={{
+                    color: currentColors[colorIndex],
+                    y: [0, -3, 0],
+                    scale: [1, 1.02, 1],
+                    filter: ["blur(0px)", "blur(2px)", "blur(0px)"],
+                    opacity: [1, 0.9, 1],
+                    textShadow: [
+                      `0 0 10px ${currentColors[colorIndex]}40`,
+                      `0 0 20px ${currentColors[colorIndex]}60`,
+                      `0 0 10px ${currentColors[colorIndex]}40`,
+                    ],
+                  }}
+                  transition={{ duration: 0.5, delay: globalIndex * 0.05 }}
+                  className="inline-block font-sans tracking-tight font-bold bg-clip-text"
+                  style={{
+                    textShadow: `0 1px 3px rgba(0,0,0,0.3), 0 0 20px ${currentColors[colorIndex]}30`,
+                    fontWeight: "700",
+                  }}
+                >
+                  {char}
+                </motion.span>
+              );
+            })}
+          </span>
+        );
+      })}
     </>
   );
 }
